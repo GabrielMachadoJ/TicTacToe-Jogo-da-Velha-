@@ -40,6 +40,8 @@ function clickedBox(element) {
         players.classList.add("active")
         element.setAttribute("id", playerSign)
     }
+    selectWinner() //calling the winner function
+    players.style.pointerEvents = "none" // once user select then user
     element.style.pointerEvents = "none" // once user select any box then that box can't be selected again
     let randomDelayTime = ((Math.random() * 1000) + 200).toFixed() //generating random time delay so bot will delay randomly to select box
     setTimeout(() => {
@@ -50,6 +52,8 @@ function clickedBox(element) {
 
 // bot click function
 function bot(){
+    //first change the playerSign... so if user has X value in id then bot will have O
+    playerSign = "O"
     let array = [] //creating empty array ... we'll store unselected box index in this array
     for(let i = 0; i < allBox.length; i++) {
         if(allBox[i].childElementCount == 0){ // if span has no any child element
@@ -61,10 +65,33 @@ function bot(){
         if(players.classList.contains("player")) { //if players element has contains .player
             allBox[randomBox].innerHTML = `<i class="${playerXIcon}"></i>` //adding cross icon tag inside user clicked element
             players.classList.remove("active")
+            //if user is O then the box id value will be X
+            playerSign = "X"
+            allBox[randomBox].setAttribute("id", playerSign)
         } else {
             allBox[randomBox].innerHTML = `<i class="${playerOIcon}"></i>` //adding circle icon tag inside user clicked element
             players.classList.remove("active")
+            allBox[randomBox].setAttribute("id", playerSign)
         }
+        selectWinner() //calling the winner function
     }
     allBox[randomBox].style.pointerEvents = "none" //once bot select any box then user can't select or click on that box
+    playerSign = "X" //passing the X value
+}
+
+//let work on select the winner
+function getClass(idname){ 
+    return document.querySelector(".box" + idname).id //returning id name
+}
+
+function checkClass(val1, val2, val3, sign){
+    if(getClass(val1) == sign && getClass(val2) == sign && getClass(val3) == sign ){
+        return true
+    }
+}
+
+function selectWinner(){ //if one combination of them matched then select the winner
+    if(checkClass(1, 2, 3, playerSign) || checkClass(4, 5, 6, playerSign) || checkClass(7, 8, 9, playerSign) || checkClass(1, 4, 7, playerSign) || checkClass(2, 5, 8, playerSign) || checkClass(3, 6, 9, playerSign) || checkClass(1, 5, 9, playerSign) || checkClass(3, 5, 7, playerSign) ) {
+
+    }
 }
